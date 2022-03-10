@@ -1,0 +1,78 @@
+{
+  "name": "persisted-requests",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "postinstall": "husky install",
+    "build": "rm -rf dist/** && tsc",
+    "start": "npm run build && node dist/index.js",
+    "test": "karma start karma.conf.js",
+    "lint": "eslint --fix src/**/*.ts *.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "axios",
+    "typescript",
+    "request",
+    "REST",
+    "persistence",
+    "request-persistence",
+    "persisted-requests",
+    "reliability"
+  ],
+  "homepage": "https://github.com/tehtea/persisted-requests",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:tehtea/persisted-requests.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tehtea/persisted-requests/issues"
+  },
+  "author": "tehtea",
+  "license": "GPL-3.0-or-later",
+  "devDependencies": {
+    "@commitlint/cli": "^13.1.0",
+    "@commitlint/config-conventional": "^13.1.0",
+    "@types/axios": "^0.14.0",
+    "@types/jasmine": "^4.0.3",
+    "@types/jasmine-ajax": "^3.3.3",
+    "@types/lodash": "^4.14.179",
+    "@types/query-string": "^6.3.0",
+    "@types/serialize-javascript": "^5.0.2",
+    "@types/uuid": "^8.3.4",
+    "@typescript-eslint/eslint-plugin": "^5.27.0",
+    "@typescript-eslint/parser": "^5.27.0",
+    "eslint": "^8.17.0",
+    "eslint-config-google": "^0.14.0",
+    "istanbul-instrumenter-loader": "^3.0.1",
+    "husky": "^7.0.2",
+    "jasmine-core": "^4.1.1",
+    "karma": "^6.3.17",
+    "karma-chrome-launcher": "^3.1.1",
+    "karma-coverage": "^2.2.0",
+    "karma-coverage-istanbul-reporter": "^3.0.3",
+    "karma-firefox-launcher": "^2.1.2",
+    "karma-jasmine": "^1.1.2",
+    "karma-jasmine-ajax": "^0.1.13",
+    "karma-safari-launcher": "^1.0.0",
+    "karma-sourcemap-loader": "^0.3.8",
+    "karma-webpack": "^5.0.0",
+    "ts-loader": "^9.3.0",
+    "typescript": "^4.7.3",
+    "webpack": "^5.72.1",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "dependencies": {
+    "axios": "^0.26.0",
+    "http-status-codes": "^2.2.0",
+    "uuid": "^8.3.2"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ]
+}
