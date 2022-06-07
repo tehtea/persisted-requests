@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import './App.css';
-import axios from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import ReactJson from 'react-json-view';
 import { RequestManager, mountAxiosInterceptor, PersistenceTypes } from 'persisted-requests'
 import logo from './logo.svg'
@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import 'bootstrap/dist/css/bootstrap.min.css'; // needed for bootstrap
 
-const requestManagerInstance = new RequestManager({
+const requestManagerInstance: RequestManager = new RequestManager({
   persistenceType: PersistenceTypes.LOCAL_STORAGE,
   loadFromStore: true,
   resetRequestManager: true,
@@ -16,16 +16,16 @@ const requestManagerInstance = new RequestManager({
 
 const setupAxiosInstance = () => {
   const axiosInstance = axios.create({
-    baseURL: "https://jsonplaceholder.typicode.com"
+    baseURL: "https://persisted-requests-mockserver.herokuapp.com"
   })
   mountAxiosInterceptor(axiosInstance, requestManagerInstance)
   return axiosInstance
 }
 
 const createResourceWithDelay = async (
-  axiosInstance,
-  delayTimeInSeconds,
-  handleChangeStorageCallback
+  axiosInstance: AxiosInstance,
+  delayTimeInSeconds: number,
+  handleChangeStorageCallback: CallableFunction
 ) => {
 
   const response = axiosInstance.post("posts", {
@@ -34,7 +34,7 @@ const createResourceWithDelay = async (
     userId: 1,
   }, {
     params: {
-      "_delay": Number.parseInt(delayTimeInSeconds) * 1000
+      "_delay": delayTimeInSeconds * 1000
     }
   })
 
@@ -52,7 +52,7 @@ const createResourceWithDelay = async (
 const getLocalStorageItems = () => {
   const localStorageItems = []
   for (let i = 0; i < localStorage.length; i++) {
-    const currentKey = localStorage.key(i)
+    const currentKey: string = localStorage.key(i) as string
     const currentItem = localStorage.getItem(currentKey)
     localStorageItems.push({
       key: currentKey,
@@ -85,7 +85,7 @@ function App() {
     }
   }, [requestInProgress, delayTime])
 
-  const onDelaySelectChange = (event) => {
+  const onDelaySelectChange = (event: ChangeEvent<HTMLInputElement>) => {
     let newDelayTime = 0;
     if (Number.parseInt(event.target.value, 10) >= 0) {
       newDelayTime = Number.parseInt(event.target.value, 10)
@@ -93,7 +93,7 @@ function App() {
     setDelayTime(newDelayTime)
   }
 
-  const replayRequest = async (localStorageKey, handleChangeStorageCallback) => {
+  const replayRequest = async (localStorageKey: string, handleChangeStorageCallback: CallableFunction) => {
     if (!localStorageKey.startsWith('persistedQueue:')) {
       return;
     }
@@ -102,12 +102,12 @@ function App() {
     if (!originalRequest) {
       return
     }
-    
+
     handleChangeStorageCallback()
 
     // cannot use existing axios instance, must use the vanilla one
     // axiosInstance.request(originalRequest.rawRequest)
-    axios.request(originalRequest.rawRequest)
+    axios.request(originalRequest.rawRequest as AxiosRequestConfig)
   }
 
   return (
@@ -145,8 +145,8 @@ function App() {
                 <tr key={key}>
                   <td>{key + 1}</td>
                   <td>{localStorageEntry.key}</td>
-                  <td style={{ textAlign: 'left' }}><ReactJson src={JSON.parse(localStorageEntry.item)} /></td>
-                  <td><Button onClick={() => replayRequest(localStorageEntry.key, handleChangeStorage)}>Replay Request</Button></td>
+                  <td style={{ textAlign: 'left' }}><ReactJson src={JSON.parse(localStorageEntry.item as string)} /></td>
+                  <td><Button onClick={() => replayRequest(localStorageEntry.key as string, handleChangeStorage)}>Replay Request</Button></td>
                 </tr>
               )
             })}

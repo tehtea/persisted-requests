@@ -36,7 +36,6 @@
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",
     "@commitlint/config-conventional": "^13.1.0",
-    "@types/axios": "^0.14.0",
     "@types/jasmine": "^4.0.3",
     "@types/jasmine-ajax": "^3.3.3",
     "@types/lodash": "^4.14.179",
@@ -47,8 +46,8 @@
     "@typescript-eslint/parser": "^5.27.0",
     "eslint": "^8.17.0",
     "eslint-config-google": "^0.14.0",
-    "istanbul-instrumenter-loader": "^3.0.1",
     "husky": "^7.0.2",
+    "istanbul-instrumenter-loader": "^3.0.1",
     "jasmine-core": "^4.1.1",
     "karma": "^6.3.17",
     "karma-chrome-launcher": "^3.1.1",
@@ -66,7 +65,7 @@
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
-    "axios": "^0.26.0",
+    "axios": "^0.27.2",
     "http-status-codes": "^2.2.0",
     "uuid": "^8.3.2"
   },
