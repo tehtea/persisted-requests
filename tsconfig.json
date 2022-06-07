@@ -2,6 +2,8 @@
     "compilerOptions": {
         "sourceMap": true,
         "allowJs": true,
+        // Generate d.ts files
+        "declaration": true,
         "esModuleInterop": true,
         "lib": [
             "DOM",
