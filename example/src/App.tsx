@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import ReactJson from 'react-json-view';
@@ -22,29 +22,24 @@ const setupAxiosInstance = () => {
   return axiosInstance
 }
 
-const createResourceWithDelay = async (
+const createPost = async (
   axiosInstance: AxiosInstance,
-  delayTimeInSeconds: number,
-  handleChangeStorageCallback: CallableFunction
+  refreshStorageCache: CallableFunction
 ) => {
 
   const response = axiosInstance.post("posts", {
     title: "foo",
     body: "bar",
     userId: 1,
-  }, {
-    params: {
-      "_delay": delayTimeInSeconds * 1000
-    }
   })
 
   setTimeout(() => {
-    handleChangeStorageCallback()
+    refreshStorageCache()
   }, 100) // apply setTimeout because the interceptor takes a while to actually persist the requests
 
   await response
 
-  handleChangeStorageCallback()
+  refreshStorageCache()
 
   return response
 }
@@ -65,35 +60,31 @@ const getLocalStorageItems = () => {
 const axiosInstance = setupAxiosInstance()
 
 function App() {
-  const [delayTime, setDelayTime] = useState(5);
   const [requestInProgress, setRequestInProgress] = useState(false);
   const [localStorageState, setLocalStorageState] = useState(getLocalStorageItems());
 
-  const handleChangeStorage = () => {
+  const refreshStorageCache = () => {
     const currentLocalStorageItems = getLocalStorageItems()
     setLocalStorageState(currentLocalStorageItems);
   }
 
   useEffect(() => {
     const fireRequest = async () => {
-      await createResourceWithDelay(axiosInstance, delayTime, handleChangeStorage);
-      setRequestInProgress(false)
+      try {
+        await createPost(axiosInstance, refreshStorageCache);
+      } catch (error) {
+        console.error('Error while creating post: ', error)
+      } finally {
+        setRequestInProgress(false)
+      }
     }
 
     if (requestInProgress) {
       fireRequest()
     }
-  }, [requestInProgress, delayTime])
+  }, [requestInProgress])
 
-  const onDelaySelectChange = (event: ChangeEvent<HTMLInputElement>) => {
-    let newDelayTime = 0;
-    if (Number.parseInt(event.target.value, 10) >= 0) {
-      newDelayTime = Number.parseInt(event.target.value, 10)
-    }
-    setDelayTime(newDelayTime)
-  }
-
-  const replayRequest = async (localStorageKey: string, handleChangeStorageCallback: CallableFunction) => {
+  const replayRequest = async (localStorageKey: string, refreshStorageCache: CallableFunction) => {
     if (!localStorageKey.startsWith('persistedQueue:')) {
       return;
     }
@@ -103,11 +94,12 @@ function App() {
       return
     }
 
-    handleChangeStorageCallback()
+    refreshStorageCache()
 
     // cannot use existing axios instance, must use the vanilla one
-    // axiosInstance.request(originalRequest.rawRequest)
-    axios.request(originalRequest.rawRequest as AxiosRequestConfig)
+    // because all the settings are already included in the request config already
+    const retryAxiosInstance = axios.create()
+    retryAxiosInstance.request(originalRequest.rawRequest as AxiosRequestConfig)
   }
 
   return (
@@ -116,10 +108,6 @@ function App() {
         <h1> Persisted Requests - Demo </h1>
         <div>
           <Button disabled={requestInProgress} onClick={() => setRequestInProgress(true)}>Fire A Request!</Button>
-          <div>
-            <label htmlFor='requestDelaySelect'>Request fulfillment delay (s)</label>
-            <input id='requestDelaySelect' value={delayTime} type={"number"} onChange={onDelaySelectChange} />
-          </div>
         </div>
         {requestInProgress && (
           <>
@@ -146,7 +134,7 @@ function App() {
                   <td>{key + 1}</td>
                   <td>{localStorageEntry.key}</td>
                   <td style={{ textAlign: 'left' }}><ReactJson src={JSON.parse(localStorageEntry.item as string)} /></td>
-                  <td><Button onClick={() => replayRequest(localStorageEntry.key as string, handleChangeStorage)}>Replay Request</Button></td>
+                  <td><Button onClick={() => replayRequest(localStorageEntry.key as string, refreshStorageCache)}>Replay Request</Button></td>
                 </tr>
               )
             })}
