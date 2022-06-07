@@ -3,6 +3,8 @@
         "sourceMap": true,
         "allowJs": true,
         // Generate d.ts files
+        // have to set this to false before running tests
+        // TODO: clean up this tech debt
         "declaration": true,
         "esModuleInterop": true,
         "lib": [
