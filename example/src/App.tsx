@@ -107,7 +107,9 @@ function App() {
       <header className="App-header">
         <h1> Persisted Requests - Demo </h1>
         <div>
-          <Button disabled={requestInProgress} onClick={() => setRequestInProgress(true)}>Fire A Request!</Button>
+          <Button disabled={requestInProgress} onClick={() => setRequestInProgress(true)}>
+            Fire A Request! (5 second delay before response received)
+          </Button>
         </div>
         {requestInProgress && (
           <>
