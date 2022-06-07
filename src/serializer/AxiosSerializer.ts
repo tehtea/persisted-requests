@@ -8,12 +8,11 @@ import {TaggedAxiosRequestConfig} from '../types/taggedRequests/TaggedAxiosReque
 class AxiosSerializer {
   async serializeRequest(taggedRequest: AxiosRequestEnvelope): Promise<SerializedRequest> {
     const axiosRequest = taggedRequest.rawRequest;
-    const builtUri = axios.getUri(axiosRequest); // automatically embeds query string inside
     const serializedRequest: SerializedRequest = {
       requestId: taggedRequest.requestId,
       originalRequestClientType: RequestClientType.AXIOS,
       method: axiosRequest.method as Method,
-      url: this.serializeUrl(builtUri, axiosRequest.baseURL as string),
+      url: axios.getUri(axiosRequest), // automatically embeds params inside
       httpVersion: '1.2',
       cookies: [], // TODO
     };
@@ -60,13 +59,6 @@ class AxiosSerializer {
       requestClientType: RequestClientType.AXIOS,
       rawRequest: requestConfig,
     };
-  }
-
-  private serializeUrl(url: string, baseUrl?: string) {
-    if (!baseUrl) {
-      return url;
-    }
-    return `${baseUrl}/${url}`; // TODO: this confirm has edge cases, relook into this
   }
 
   private async serializePostData(data: any): Promise<PostData> {
