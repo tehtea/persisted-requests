@@ -43,6 +43,9 @@ Only end-to-end testing was done for now due to the relative small size of this 
 The tests can be run by calling `npm run test`. `Karma` was used with `Jasmine` to run
 them in the browser, with `Jasmine-Ajax` used for capturing the requests sent using an `XMLHTTPRequest()` spy.
 
+Make sure to set `"declaration": false` in `tsconfig.json` before running tests.
+This is a tech debt to clean up.
+
 ## Demo
 
 The [demo app](tehtea.github.io/persisted-requests) contains example usage for this library, and also demonstrates what it does under the hood.

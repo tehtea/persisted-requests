@@ -6,8 +6,7 @@ const testCode = 'tests/**/*.spec.ts';
 module.exports = function(config) {
   config.set({
     frameworks: ['jasmine-ajax', 'jasmine'],
-    // does not work with Safari, some CORS issue to debug
-    browsers: ['Chrome', 'Firefox'],
+    browsers: ['Chrome', 'Firefox', 'Safari'],
     files: [
       testCode,
     ],

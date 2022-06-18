@@ -63,7 +63,7 @@ class AxiosSerializer {
 
   private async serializePostData(data: any): Promise<PostData> {
     if (!(data instanceof FormData)) {
-      if (typeof data === "string") {
+      if (typeof data === 'string') {
         return {
           rawData: data,
           isFormData: false,
@@ -106,12 +106,17 @@ class AxiosSerializer {
     };
   }
 
-
   private deserializePostData(serializedPostData: PostData): string | object | boolean | number | null {
-    const dataRead: { [key: string | number | symbol]: { value: string, fileName: string, isFile: boolean } } =
-            JSON.parse(serializedPostData.rawData);
-    if (!serializedPostData.isFormData) {
-      return dataRead;
+    let dataRead: { [key: string | number | symbol]: { value: string, fileName: string, isFile: boolean } };
+    try {
+      dataRead = JSON.parse(serializedPostData.rawData);
+      if (!serializedPostData.isFormData) {
+        return dataRead;
+      }
+    } catch (error) {
+      console.warn(`JSON parsing failed with error: '${error}'. 
+        Assuming this is URLEncodedData for now.`);
+      return serializedPostData.rawData;
     }
     const reconstructedFormData: FormData = new FormData();
     Object.entries(dataRead).forEach(((formEntry) => {
@@ -159,10 +164,15 @@ class AxiosSerializer {
     if (data instanceof URLSearchParams) {
       return 'application/x-www-form-urlencoded;charset=utf-8';
     }
+    // also, any string passed as data is assumed to be urlencoded for now
+    if (typeof data === 'string') {
+      return 'application/x-www-form-urlencoded';
+    }
     if (data instanceof Object) {
       return 'application/json';
     }
-    console.error(`unexpected content type fallthrough, see data: '${data}'. Please create an issue on https://github.com/tehtea/persisted-requests`);
+    console.error(`unexpected content type fallthrough, see data: '${data}'. 
+      Please create an issue on https://github.com/tehtea/persisted-requests`);
     return 'UNKNOWN';
   }
 
