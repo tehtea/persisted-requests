@@ -8,6 +8,11 @@ This library allows REST requests to be made from a client without the original 
 
 This is done by persisting each request in storage before it is sent out. By default, the request then gets removed from storage after it is fulfilled by the server.
 
+## Installation Steps
+
+Using NPM: `npm install --save persisted-requests`
+Using Yarm: `yarn add persisted-requests`
+
 ## Supported Environments
 - Firefox
 - Chrome
@@ -22,8 +27,21 @@ See the `browsers` section of `karma.conf.js` for the list of browsers for which
 ## Supported REST Client
 Only Axios is supported for now, future support for other clients will be contingent on the usage of this library.
 
+## Unsupported / Untested Request Features
+- Cookies
+- The following Request Body types:
+    - XPath
+    - XML
+    - XML Schema
+    - JSON Schema
+    - regular expression
+    - plain text
+
 ## Testing
 Only end-to-end testing was done for now due to the relative small size of this project. See the `tests` folder for them.
+
+The tests can be run by calling `npm run test`. `Karma` was used with `Jasmine` to run
+them in the browser, with `Jasmine-Ajax` used for capturing the requests sent using an `XMLHTTPRequest()` spy.
 
 ## Demo
 
