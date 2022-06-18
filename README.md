@@ -49,4 +49,4 @@ This is a tech debt to clean up.
 
 ## Demo
 
-The [demo app](tehtea.github.io/persisted-requests) contains example usage for this library, and also demonstrates what it does under the hood.
+The [demo app](https://tehtea.github.io/persisted-requests) contains example usage for this library, and also demonstrates what it does under the hood.
