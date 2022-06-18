@@ -1,6 +1,6 @@
 {
   "name": "persisted-requests",
-  "version": "1.0.0",
+  "version": "1.0.0-prerelease+build",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
