@@ -63,10 +63,17 @@ class AxiosSerializer {
 
   private async serializePostData(data: any): Promise<PostData> {
     if (!(data instanceof FormData)) {
-      return {
-        rawData: JSON.stringify(data),
-        isFormData: false,
-      };
+      if (typeof data === "string") {
+        return {
+          rawData: data,
+          isFormData: false,
+        };
+      } else {
+        return {
+          rawData: JSON.stringify(data),
+          isFormData: false,
+        };
+      }
     }
 
     const dataAsFormData = data as FormData;
@@ -155,7 +162,8 @@ class AxiosSerializer {
     if (data instanceof Object) {
       return 'application/json';
     }
-    return 'application/x-www-form-urlencoded';
+    console.error(`unexpected content type fallthrough, see data: '${data}'. Please create an issue on https://github.com/tehtea/persisted-requests`);
+    return 'UNKNOWN';
   }
 
   // adapted from Axios code too
