@@ -11,7 +11,8 @@ This is done by persisting each request in storage before it is sent out. By def
 ## Installation Steps
 
 Using NPM: `npm install --save persisted-requests`
-Using Yarm: `yarn add persisted-requests`
+
+Using Yarn: `yarn add persisted-requests`
 
 ## Supported Environments
 - Firefox
