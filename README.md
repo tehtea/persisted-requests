@@ -4,6 +4,8 @@
 [![made-with-javascript](https://img.shields.io/badge/Made%20with-JavaScript-1f425f.svg)](https://www.javascript.com)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://github.com/tehtea/persisted-requests/blob/main/LICENSE)
 
+![demo gif](docs/assets/persisted-requests-demo.gif)
+
 This library allows REST requests to be made from a client without the original context of the request becoming lost in the event the user moves away from the website, or if the page crashes.
 
 This is done by persisting each request in storage before it is sent out. By default, the request then gets removed from storage after it is fulfilled by the server.
